@@ -68,36 +68,29 @@ const Header = () => {
 };
 
 const Menu = () => {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
+
   return (
     <main className="menu">
       <h2>Our menu</h2>
 
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          <Pizza pizzaObj={pizza} key={pizza.name} />
-        ))}
-      </ul>
-
-      {/* <div className="pizzas"> */}
-      {/* <Pizza
-          name="Pizza Spinaci"
-          ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-          photoName="pizzas/spinaci.jpg"
-          price="10"
-        />
-
-        <Pizza
-          name="Pizza Funghi"
-          ingredients="Tomato, mozarella, mushrooms"
-          price="12"
-          photoName="pizzas/funghi.jpg"
-        /> */}
-      {/* </div> */}
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzaData.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>We're currently working on our menu, please come back later.</p>
+      )}
     </main>
   );
 };
 
 const Pizza = (props) => {
+  if (props.pizzaObj.soldOut) return null;
+
   return (
     <li className="pizza">
       <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
@@ -119,14 +112,22 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {isOpen && (
-        <div className="order">
-          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
-          <button className="btn">Order</button>
-        </div>
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour} and {closeHour}
+        </p>
       )}
     </footer>
   );
+};
+
+const Order = (props) => {
+  <div className="order">
+    <p>We're open until {props.closeHour}:00. Come visit us or order online.</p>
+    <button className="btn">Order</button>
+  </div>;
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
