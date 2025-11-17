@@ -76,11 +76,18 @@ const Menu = () => {
       <h2>Our menu</h2>
 
       {numPizzas > 0 ? (
-        <ul className="pizzas">
-          {pizzaData.map((pizza) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creatuve dusges to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We're currently working on our menu, please come back later.</p>
       )}
@@ -88,16 +95,16 @@ const Menu = () => {
   );
 };
 
-const Pizza = (props) => {
-  if (props.pizzaObj.soldOut) return null;
+const Pizza = ({ pizzaObj }) => {
+  // if (pizzaObj.soldOut) return null;
 
   return (
-    <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? 'SOLD OUT' : pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -113,7 +120,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       {isOpen ? (
-        <Order closeHour={closeHour} />
+        <Order openHour={openHour} closeHour={closeHour} />
       ) : (
         <p>
           We're happy to welcome you between {openHour} and {closeHour}
@@ -123,9 +130,12 @@ const Footer = () => {
   );
 };
 
-const Order = (props) => {
+const Order = ({ openHour, closeHour }) => {
   <div className="order">
-    <p>We're open until {props.closeHour}:00. Come visit us or order online.</p>
+    <p>
+      We're open from {openHour} until {closeHour}:00. Come visit us or order
+      online.
+    </p>
     <button className="btn">Order</button>
   </div>;
 };
